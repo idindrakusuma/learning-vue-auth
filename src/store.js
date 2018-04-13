@@ -95,6 +95,9 @@ export default new Vuex.Store({
     // loogut
     logout({ commit }){
       commit('clearAuthUser')
+      localStorage.removeItem('expirationDate')
+      localStorage.removeItem('token')
+      localStorage.removeItem('userId')
       alert("bye!")
       router.replace('signin')
     },

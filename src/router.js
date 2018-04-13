@@ -16,7 +16,16 @@ const routes = [
   { path: '/signin', component: SigninPage },
   {
     path: '/dashboard',
-    component: DashboardPage
+    component: DashboardPage,
+    beforeEnter(to, from, next){
+      if (localStorage.getItem('token')){
+        next();
+      }
+      else {
+        alert('you dont have an access, please signin first!')
+        next('/signin')
+      }
+    }
   }
 ]
 
