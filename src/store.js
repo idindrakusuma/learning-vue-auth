@@ -56,6 +56,11 @@ export default new Vuex.Store({
       })
         .then(res => {
           console.log(res)
+          const now = new Date()
+          const expirationDate = new Date(now.getTime() + res.data.expiresIn * 1000)
+          localStorage.setItem('token', res.data.idToken)
+          localStorage.setItem('userId', res.data.localId)
+          localStorage.setItem('expirationDate', expirationDate)
           commit('authUser', {
             token: res.data.idToken,
             userId: res.data.localId
@@ -67,6 +72,25 @@ export default new Vuex.Store({
           console.log(error)
           alert(error.message + ". please check your email & password!")
         })
+    },
+    // try to auto login using localStorage
+    tryAutoLogin({ commit }){
+      const token = localStorage.getItem('token')
+      // have an token in localStorage?
+      if (!token){
+        return
+      }
+      const expirationDate = localStorage.getItem('expirationDate')
+      const now = new Date()
+      // have an valid token?
+      if (now >= expirationDate){
+        return
+      }
+      const userId = localStorage.getItem('userId')
+      commit('authUser', {
+        token: token,
+        userId: userId
+      })
     },
     // loogut
     logout({ commit }){
