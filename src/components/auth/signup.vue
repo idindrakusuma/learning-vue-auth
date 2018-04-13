@@ -69,8 +69,6 @@
 </template>
 
 <script>
-  import axios from '../../axios-auth';
-
   export default {
     data () {
       return {
@@ -84,17 +82,17 @@
       }
     },
     methods: {
-      onAddHobby () {
+      onAddHobby() {
         const newHobby = {
           id: Math.random() * Math.random() * 1000,
           value: ''
         }
         this.hobbyInputs.push(newHobby)
       },
-      onDeleteHobby (id) {
+      onDeleteHobby(id) {
         this.hobbyInputs = this.hobbyInputs.filter(hobby => hobby.id !== id)
       },
-      onSubmit () {
+      onSubmit() {
         const formData = {
           email: this.email,
           age: this.age,
@@ -105,13 +103,10 @@
           terms: this.terms
         }
         console.log(formData);
-        axios.post('/signupNewUser?key=AIzaSyBtnInx2D4hFjvClLxTY2aao_KRWdocbf4', {
+        this.$store.dispatch('singup', {
           email: formData.email,
           password: formData.password,
-          returnSecureToken: true,
-        })
-          .then(res => console.log(res))
-          .catch(error => console.log(error))
+        });
       }
     }
   }
