@@ -3,6 +3,8 @@ import Vuex from 'vuex'
 import axios from './axios-auth'
 import globalAxios from 'axios'
 
+import router from './router'
+
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -53,12 +55,18 @@ export default new Vuex.Store({
             token: res.data.idToken,
             userId: res.data.localId
           })
+          router.replace('/dashboard')
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+          console.log(error)
+          alert(error.message + ". please check your email & password!")
+        })
     },
     // loogut
     logout({ commit }){
       commit('clearAuthUser')
+      alert("bye!")
+      router.replace('signin')
     },
     // store data to database
     storeUser ({commit, state}, userData) {
@@ -66,7 +74,11 @@ export default new Vuex.Store({
         return
       }
       globalAxios.post('/users.json' + '?auth=' + state.idToken, userData)
-        .then(res => console.log(res))
+        .then(res => {
+          console.log(res)
+          alert("register success! now you can signin")
+          router.replace('/signin')
+        })
         .catch(error => console.log(error))
     },
     fetchUser ({commit, state}) {
