@@ -104,8 +104,12 @@
           hobbies: this.hobbyInputs.map(hobby => hobby.value),
           terms: this.terms
         }
-        console.log(formData)
-        axios.post('/users.json', formData)
+        console.log(formData);
+        axios.post('/signupNewUser?key=AIzaSyBtnInx2D4hFjvClLxTY2aao_KRWdocbf4', {
+          email: formData.email,
+          password: formData.password,
+          returnSecureToken: true,
+        })
           .then(res => console.log(res))
           .catch(error => console.log(error))
       }
