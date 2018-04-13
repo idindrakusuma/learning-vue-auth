@@ -44,7 +44,7 @@
           password: formData.password,
         });
       }
-    }
+    },
   }
 </script>
 

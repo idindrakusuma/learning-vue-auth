@@ -13,7 +13,17 @@ Vue.use(VueRouter)
 const routes = [
   { path: '/', component: WelcomePage },
   { path: '/signup', component: SignupPage },
-  { path: '/signin', component: SigninPage },
+  {
+    path: '/signin',
+    component: SigninPage,
+    beforeEnter(to, from, next){
+      if(localStorage.getItem('token')){
+        console.log('you are authenticated')
+        next('/dashboard');
+      }
+      next()
+    }
+  },
   {
     path: '/dashboard',
     component: DashboardPage,
