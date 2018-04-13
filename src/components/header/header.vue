@@ -14,6 +14,11 @@
         <li v-if="auth">
           <router-link to="/dashboard">Dashboard</router-link>
         </li>
+        <li v-if="auth">
+          <button
+            class="logout"
+            @click="onLogout">Logout</button>
+        </li>
       </ul>
     </nav>
   </header>
@@ -24,6 +29,11 @@
     computed: {
       auth(){
         return this.$store.getters.isAunthenticated
+      }
+    },
+    methods: {
+      onLogout() {
+        this.$store.dispatch('logout')
       }
     }
   }
@@ -77,5 +87,13 @@
   li a:active,
   li a.router-link-active {
     color: #fa923f;
+  }
+
+  .logout{
+    background-color: transparent;
+    font: inherit;
+    color: white;
+    border: none;
+    cursor: pointer;
   }
 </style>

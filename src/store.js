@@ -18,6 +18,10 @@ export default new Vuex.Store({
     },
     storeUser (state, user) {
       state.user = user
+    },
+    clearAuthUser(state){
+      state.idToken = null
+      state.userId = null
     }
   },
   actions: {
@@ -52,6 +56,11 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error))
     },
+    // loogut
+    logout({ commit }){
+      commit('clearAuthUser')
+    },
+    // store data to database
     storeUser ({commit, state}, userData) {
       if (!state.idToken) {
         return
