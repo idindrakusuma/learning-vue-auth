@@ -14,6 +14,9 @@
         <li v-if="auth">
           <router-link to="/dashboard">Dashboard</router-link>
         </li>
+         <li v-if="auth">
+          <router-link to="/profile">Profile</router-link>
+        </li>
         <li v-if="auth">
           <button
             class="logout"

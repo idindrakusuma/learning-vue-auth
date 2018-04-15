@@ -11,21 +11,30 @@ export default new Vuex.Store({
   state: {
     idToken: null,
     userId: null,
-    user: null
+    users: [],
+    loading: false,
+    profile:{
+      email: null
+    }
   },
+
+
   mutations: {
     authUser (state, userData) {
       state.idToken = userData.token
       state.userId = userData.userId
+      state.profile.email = userData.email
     },
-    storeUser (state, user) {
-      state.user = user
+    storeUsers (state, users) {
+      state.users = users
     },
     clearAuthUser(state){
       state.idToken = null
       state.userId = null
     }
   },
+
+
   actions: {
     setLogoutTimer({ commit, dispatch }, expirationTime){
       setTimeout(() => {
@@ -44,6 +53,7 @@ export default new Vuex.Store({
             token: res.data.idToken,
             userId: res.data.localId
           })
+          // this function to access the Actions function
           dispatch('storeUser', authData)
         })
         .catch(error => console.log(error))
@@ -63,7 +73,8 @@ export default new Vuex.Store({
           localStorage.setItem('expirationDate', expirationDate)
           commit('authUser', {
             token: res.data.idToken,
-            userId: res.data.localId
+            userId: res.data.localId,
+            email: authData.email
           })
           dispatch('setLogoutTimer', res.data.expiresIn)
           router.replace('/dashboard')
@@ -114,14 +125,16 @@ export default new Vuex.Store({
         })
         .catch(error => console.log(error))
     },
-    fetchUser ({commit, state}) {
+    fetchUsers ({commit, state}) {
       if (!state.idToken) {
         return
       }
+      state.loading = true
       globalAxios.get('/users.json' + '?auth=' + state.idToken)
         .then(res => {
           console.log(res)
           const data = res.data
+          console.log(data)
           const users = []
           for (let key in data) {
             const user = data[key]
@@ -129,17 +142,26 @@ export default new Vuex.Store({
             users.push(user)
           }
           console.log(users)
-          commit('storeUser', users[0])
+          commit('storeUsers', users)
+          state.loading = false
         })
         .catch(error => console.log(error))
     }
   },
+
+
   getters: {
-    user (state) {
-      return state.user
+    emailUser (state){
+      return state.profile.email
+    },
+    users (state) {
+      return state.users
     },
     isAunthenticated (state) {
       return state.idToken !== null
+    },
+    loading (state){
+      return state.loading
     }
   }
 })

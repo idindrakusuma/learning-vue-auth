@@ -7,6 +7,7 @@ import WelcomePage from './components/welcome/welcome.vue'
 import DashboardPage from './components/dashboard/dashboard.vue'
 import SignupPage from './components/auth/signup.vue'
 import SigninPage from './components/auth/signin.vue'
+import Profile from './components/profile/profile.vue'
 
 Vue.use(VueRouter)
 
@@ -27,16 +28,23 @@ const routes = [
   {
     path: '/dashboard',
     component: DashboardPage,
-    beforeEnter(to, from, next){
-      if (localStorage.getItem('token')){
-        next();
-      }
-      else {
-        alert('you dont have an access, please signin first!')
-        next('/signin')
-      }
-    }
+    beforeEnter: checkAuth
+  },
+  {
+    path: '/profile',
+    component: Profile,
+    beforeEnter: checkAuth
   }
 ]
+
+function checkAuth(to, from, next){
+  if (localStorage.getItem('token')) {
+    next();
+  }
+  else {
+    alert("You don't have an access, please signin first!")
+    next('/signin')
+  }
+}
 
 export default new VueRouter({mode: 'history', routes})
